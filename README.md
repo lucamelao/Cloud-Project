@@ -34,3 +34,12 @@ export AWS_SECRET_ACCESS_KEY= {SECRET_ACCESS_KEY}
 ```
 
 **WARNING:** Nunca deixe suas credenciais públicas, faça uso de variáveis de ambiente locais e do AWS CLI.
+
+----
+```shell
+terraform plan -out "tfplan.out" -var-file="my.tfvars.json"
+```
+
+```shell
+terraform apply "tfplan.out"
+```

@@ -16,10 +16,6 @@ variable "instance_type" {
 variable "instance_tags" {
   type        = map(string)
   description = ""
-  default = {
-    Name    = "Ubuntu"
-    Project = "Projeto Cloud 2022"
-  }
 }
 
 variable "vpc_cidr_block" {
@@ -57,14 +53,14 @@ variable "ingress_protocol" {
   description = "Protocol"
 }
 
-variable "egress_from_port" {
-  type        = number
-  description = "Egress from port"
-}
-
 variable "egress_to_port" {
   type        = number
   description = "Egress to port"
+}
+
+variable "egress_from_port" {
+  type        = number
+  description = "Egress from port"
 }
 
 variable "egress_protocol" {
@@ -75,4 +71,20 @@ variable "egress_protocol" {
 variable "egress_cidr_blocks" {
   type        = list(string)
   description = "CIDR blocks"
+}
+
+variable "igw_tags" {
+  type        = map(string)
+  description = "Internet Gateway Tags"
+}
+
+variable "route_table_cidr_block" {
+  type        = string
+  description = "Route Table CIDR block"
+}
+
+variable "second_route_table_tags" {
+  type        = map(string)
+  description = "2nd Route Table Tags"
+
 }

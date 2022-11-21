@@ -5,3 +5,7 @@ output "web_name" {
 output "web_ami" {
   value = aws_instance.web_server.ami
 }
+
+output "igw_descpriton" {
+  value = aws_internet_gateway.my_igw.tags.Name
+}
