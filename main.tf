@@ -20,26 +20,39 @@ resource "aws_instance" "web_server" {
 
 resource "aws_vpc" "my_vpc" {
   cidr_block = var.vpc_cidr_block
-
   tags = var.vpc_tags
 }
 
-resource "aws_subnet" "mypublic_subnets" {
-  count      = length(var.public_subnet_cidrs)
+resource "aws_subnet" "mypublic_subnet" {
   vpc_id     = aws_vpc.my_vpc.id
-  cidr_block = element(var.public_subnet_cidrs, count.index)
+  cidr_block = var.subnet_cidr_block
 
   tags = {
-    Name = "Public Subnet ${count.index + 1}"
+    Name = "Luca's Public Subnet"
   }
 }
 
-resource "aws_subnet" "myprivate_subnets" {
-  count      = length(var.private_subnet_cidrs)
-  vpc_id     = aws_vpc.my_vpc.id
-  cidr_block = element(var.private_subnet_cidrs, count.index)
+resource "aws_security_group" "my_security_group" {
+  name        = "Luca Security Group"
+  description = "Testing security group"
+  vpc_id      = aws_vpc.my_vpc.id
+
+  ingress {
+    description = "TLS from VPC"
+    from_port   = var.ingress_from_port
+    to_port     = var.ingress_to_port
+    protocol    = var.ingress_protocol
+    cidr_blocks = [aws_vpc.my_vpc.cidr_block]
+  }
+
+  egress {
+    from_port   = var.egress_from_port
+    to_port     = var.egress_to_port
+    protocol    = var.egress_protocol
+    cidr_blocks = var.egress_cidr_blocks
+  }
 
   tags = {
-    Name = "Private Subnet ${count.index + 1}"
+    Name = "Test Security Group"
   }
 }

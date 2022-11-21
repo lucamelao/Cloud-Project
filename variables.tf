@@ -39,15 +39,40 @@ variable "subnet_tags" {
 
 variable "subnet_cidr_block" {
   type        = string
-  description = ""
-}
-
-variable "public_subnet_cidrs" {
-  type        = list(string)
   description = "Public Subnet CIDR values"
 }
 
-variable "private_subnet_cidrs" {
+variable "ingress_from_port" {
+  type        = number
+  description = "Ingress from port"
+}
+
+variable "ingress_to_port" {
+  type        = number
+  description = "Ingress to port"
+}
+
+variable "ingress_protocol" {
+  type        = string
+  description = "Protocol"
+}
+
+variable "egress_from_port" {
+  type        = number
+  description = "Egress from port"
+}
+
+variable "egress_to_port" {
+  type        = number
+  description = "Egress to port"
+}
+
+variable "egress_protocol" {
+  type        = string
+  description = "Protocol"
+}
+
+variable "egress_cidr_blocks" {
   type        = list(string)
-  description = "Private Subnet CIDR values"
+  description = "CIDR blocks"
 }
