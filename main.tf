@@ -77,7 +77,10 @@ resource "aws_security_group" "my_security_group" {
     cidr_blocks = var.egress_cidr_blocks
   }
 
-  tags = {
-    Name = "Test Security Group"
-  }
+  tags = var.security_group_tags
+}
+
+# Create aws iam user
+resource "aws_iam_user" "my_iam_user" {
+  name = var.user_name
 }

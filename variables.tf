@@ -86,5 +86,14 @@ variable "route_table_cidr_block" {
 variable "second_route_table_tags" {
   type        = map(string)
   description = "2nd Route Table Tags"
+}
 
+variable "security_group_tags" {
+  type        = map(string)
+  description = "Tags for the security group"
+}
+
+variable "user_name" {
+  type        = string
+  description = "User name"
 }
