@@ -1,39 +1,46 @@
 '''
-Esse file escreve o nosso my.tfvars.json recebendo inputs do usuário.
-Com o arquivo estruturado, ele executa os comandos do Terraform para criar a infraestrutura.
+
+FUNCIONALIDADES
+- Criar um arquivo .tfvars.json com os inputs do usuário - INFRA
+    1. tipo da instancia, no minimo 2 disponiveis
+    2. nome da instancia
+    3. user
+- Listar instancias
+    OBS: security group default na porta 22, tem que listar seu conteudo
+- Destruir instancias
+
 '''
+from python.helpers import UI, Build_Terraform, List_Terraform, Destroy_Terraform, Quit_Terraform
 
-# Imports
-import subprocess
-import json
+user_interface = UI()
+B = Build_Terraform()
+L = List_Terraform()
+D = Destroy_Terraform()
+Q = Quit_Terraform()
 
-# Desgin
-with open("start_image.txt", 'r') as f:
-    print(f.read())
+user_interface.draw_header()
+while True:
+    initial_input = False
+    while not initial_input:
+        user_interface.show_options()
+        option = input("Choose an option: ").upper()
+    
+        if option == "B":
+            initial_input = True
+            B.set_infra()
+            B.build_infra()
 
-# Taking multiple inputs
-x = [str(x) for x in input("Set as many params as you want for your infrastructure: ").split()]
-# print("List: ", x)
+        elif option == "L":
+            initial_input = True
+            L.list()  
 
-# Set variables
-keys = x[0::2]
-values = x[1::2]
-dictionary = dict(zip(keys, values))
+        elif option == "D":
+            initial_input = True
+            D.destroy()   
 
-print("\n Below you can see the selected parameters for your infrastructure:\n")
-print(f"\n {dictionary}\n")
+        elif option == "Q":
+            initial_input = True
+            Q.end()
 
-# Escreve no my.tfvars.json
-
-# Serializing 
-json_object = json.dumps(dictionary, indent=0)
-
-# Writing 
-with open("test_vars.json", "w") as output_file:
-    output_file.write(json_object)
-
-print(f"\nNow let's create your infrastructure...\n")
-print(f"=======================================================================================================================================\n")
-
-# Executa comandos no Terminal
-# subprocess.call(['sh', './script.sh'])     
+        else:
+            print("[ERROR] Invalid input. Please try again.\n")
