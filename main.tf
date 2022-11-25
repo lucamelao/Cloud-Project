@@ -11,9 +11,17 @@ provider "aws" {
   region = var.aws_region
 }
 
+# Create aws iam user
+resource "aws_iam_user" "my_iam_user" {
+  for_each = toset(var.iam_users)
+  name     = each.value
+}
+
 resource "aws_instance" "web_server" {
   ami           = var.instance_ami
   instance_type = var.instance_type
+
+  #disable_api_termination = true
 
   tags = var.instance_tags
 }
@@ -58,12 +66,9 @@ resource "aws_route_table_association" "pulic_subnet_table_association" {
 }
 
 resource "aws_security_group" "my_security_group" {
-  name        = "Luca Security Group"
-  description = "Testing security group"
-  vpc_id      = aws_vpc.my_vpc.id
+  name = var.security_group_name
 
   ingress {
-    description = "TLS from VPC"
     from_port   = var.ingress_from_port
     to_port     = var.ingress_to_port
     protocol    = var.ingress_protocol
@@ -78,9 +83,4 @@ resource "aws_security_group" "my_security_group" {
   }
 
   tags = var.security_group_tags
-}
-
-# Create aws iam user
-resource "aws_iam_user" "my_iam_user" {
-  name = var.user_name
 }
