@@ -1,1 +1,2 @@
-terraform destroy -auto-approve -var-file=test.tfvars.json
+cd ../terraform_resources
+terraform destroy -auto-approve -var-file=my.tfvars.json

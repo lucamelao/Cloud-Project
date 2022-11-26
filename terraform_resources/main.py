@@ -11,6 +11,7 @@ D = Destroy_Terraform()
 Q = Quit_Terraform()
 
 user_interface.draw_header()
+
 while True:
     initial_input = False
     while not initial_input:
@@ -33,7 +34,7 @@ while True:
 
         elif option == "Q":
             initial_input = True
-            Q.end()
+            Q.end()   
 
         else:
-            print("[ERROR] Invalid input. Please try again.\n")
+            print("[ERROR] Invalid input. Please try again.\n")        

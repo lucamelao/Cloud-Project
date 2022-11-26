@@ -1,0 +1,98 @@
+{
+  
+  "aws_region" : "us-east-1",
+  
+  "iam_users": ["User_Luca_Terraform", "luca2", "luca3", "luca4"],
+
+  "instances": [{
+    "ami": "ami-08c40ec9ead489470",
+  
+    "type": "t2.micro",
+
+    "network_interface": "NIC 1",
+
+    "device_index": 0,
+      
+    "tags": {  
+      "Name": "INSTANCE 1"
+    }},
+
+    {
+
+      "ami": "ami-08c40ec9ead489470",
+    
+      "type": "t1.micro",
+  
+      "network_interface": "NIC 2",
+
+      "device_index": 0,
+        
+      "tags": {  
+        "Name": "INSTANCE 2"
+      }}
+  ],
+
+  "network_interface": 
+  [{
+
+    "subnet_id": "SUBNET 1",
+
+    "private_ip_address": ["10.0.1.4"],
+  
+    "security_groups": ["SECURITY GROUP DO LUCA"],
+
+    "tags": {  
+      "Name": "NIC 1"
+    }},
+
+    {
+      "subnet_id": "SUBNET 1",
+  
+      "private_ip_address": ["10.0.1.5"],
+    
+      "security_groups": ["SECURITY GROUP DO LUCA"],
+  
+      "tags": {  
+        "Name": "NIC 2"
+      }}
+
+  ],
+
+  "vpc": 
+  {
+    "cidr_block" : "10.0.0.0/16",
+
+    "tags" : {
+      "Name" : "VPC DO LUCA"
+    }
+  },
+
+  "subnets": 
+  [{
+    "cidr_block" : "10.0.1.0/24",
+    "tags" :{ 
+      "Name" : "SUBNET 1"
+  }}],
+
+  "security_groups": 
+  [{
+    "name" : "Luca SECURITY GROUP",
+    "description" : "Testing SEC",
+    "ingress" : 
+      {
+        "from_port" : 22,
+        "to_port" : 22,
+        "protocol" : "tcp",
+        "cidr_blocks" : ["0.0.0.0/0"]
+      },
+    "egress" : 
+      {
+        "from_port" : 0,
+        "to_port" : 0,
+        "protocol" : "-1",
+        "cidr_blocks" : ["0.0.0.0/0"]
+      },
+    "tags" : {
+      "Name" : "SECURITY GROUP DO LUCA"
+    }}]
+}

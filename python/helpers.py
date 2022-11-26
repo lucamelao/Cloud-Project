@@ -1,5 +1,5 @@
 # Imports
-from resources import Infrastructure
+from python.resources import Infrastructure
 import subprocess
 import json
 
@@ -18,17 +18,21 @@ class Build_Terraform:
     
     '''
 
-    infra = Infrastructure()
-    
-    def set_infra(self, infra):
+    def set_infra(self):
+
+        infra = Infrastructure()
+
         infra.user()
         infra.vpc()
         infra.subnet()
         infra.security_group()
         infra.instance()
 
-        with open("test.tfvars.json", "w") as output_file:
-            output_file.write('resources.json')
+        with open('resources.json', 'r') as f:
+            infra_data = json.load(f)
+
+            with open("test.tfvars.json", "w") as output_file:
+                json.dump(infra_data, output_file, indent=4)
 
     def build_infra(self):
 
@@ -50,8 +54,16 @@ class Build_Terraform:
             apply = input('Apply? [Y]es or [N]o: ').upper()
             if apply == 'Y':
                 print("\nAPPLYING\n")
-                subprocess.call(['sh', './shell_scripts/apply.sh'])
-                break
+                try:
+                    res = subprocess.call(['sh', './shell_scripts/apply.sh'])
+                    print("===================================================================\n")
+                    print("Your infrastructure is ready!\n")
+                    break
+                except res == 0:
+                    print("===================================================================\n")
+                    print("Something went wrong. Implementing again...\n")
+                    subprocess.call(['sh', './shell_scripts/apply.sh'])
+
             elif apply == 'N':
                 print("Operation canceled.\n")
                 break
@@ -78,7 +90,14 @@ class Destroy_Terraform:
     def destroy(self):
         print("===================================================================\n")
         print("Destroying your infrastructure...\n")
-        # subprocess.run(["terraform", "terraform", "-auto-approve", "-var-file=test.tfvars.json"])
+        res = subprocess.call(['sh', './shell_scripts/destroy.sh'])
+        if res == 0:
+            print("===================================================================\n")
+            print("Your infrastructure was destroyed.\n")
+        else:
+            print("===================================================================\n")
+            print("Something went wrong. Destroying again...\n")
+            subprocess.call(['sh', './shell_scripts/destroy.sh'])
 
 class Quit_Terraform:
 
