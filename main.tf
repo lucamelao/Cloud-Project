@@ -14,14 +14,12 @@ provider "aws" {
 # Create aws iam user
 resource "aws_iam_user" "my_iam_user" {
   for_each = toset(var.iam_users)
-  name     = each.value
+  name     = each.iam_users.value
 }
 
 resource "aws_instance" "web_server" {
   ami           = var.instance_ami
   instance_type = var.instance_type
-
-  #disable_api_termination = true
 
   tags = var.instance_tags
 }
@@ -36,7 +34,7 @@ resource "aws_vpc" "my_vpc" {
   }
 }
 
-resource "aws_subnet" "mypublic_subnet" {
+resource "aws_subnet" "my_subnet" {
   vpc_id     = aws_vpc.my_vpc.id
   cidr_block = var.subnet_cidr_block
   tags       = var.subnet_tags
@@ -49,7 +47,7 @@ resource "aws_internet_gateway" "my_igw" {
 }
 
 # Create a second route table
-resource "aws_route_table" "second_route_table" {
+resource "aws_route_table" "my_second_route_table" {
   vpc_id = aws_vpc.my_vpc.id
   route {
     cidr_block = var.route_table_cidr_block
@@ -60,9 +58,9 @@ resource "aws_route_table" "second_route_table" {
 }
 
 # Create a route table association
-resource "aws_route_table_association" "pulic_subnet_table_association" {
-  subnet_id      = aws_subnet.mypublic_subnet.id
-  route_table_id = aws_route_table.second_route_table.id
+resource "aws_route_table_association" "my_subnet_table_association" {
+  subnet_id      = aws_subnet.my_subnet.id
+  route_table_id = aws_route_table.my_second_route_table.id
 }
 
 resource "aws_security_group" "my_security_group" {

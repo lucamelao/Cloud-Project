@@ -1,0 +1,1 @@
+terraform plan -out "tfplan.out" -var-file="test.tfvars.json"

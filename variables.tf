@@ -55,13 +55,13 @@ variable "subnet_cidr_block" {
 variable "ingress_from_port" {
   type        = number
   description = "Ingress from port"
-  default     = 43
+  default     = 22
 }
 
 variable "ingress_to_port" {
   type        = number
   description = "Ingress to port"
-  default     = 43
+  default     = 22
 }
 
 variable "ingress_protocol" {
