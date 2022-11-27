@@ -1,7 +1,5 @@
 '''
-
-Aqui são estruturados os resources que o Terraform criará. 
-
+Aqui são estruturados e gerenciados os resources que o Terraform criará. 
 '''
 
 import json
@@ -190,7 +188,7 @@ class Infrastructure:
     def network_interface(self): 
 
         print("\nNow let's create your network interface.")
-        print("\nIt will be attached to your instance.")
+        print("It will be attached to your instance.")
 
         infra_dict = self.get_infra()
 
@@ -203,9 +201,9 @@ class Infrastructure:
         
         security_groups = infra_dict["security_groups"][0]["tags"]["Name"]
         
-        nic = input("\nType the network interface name (example: NIC 1): ")
-        if nic == "":
-            nic = "NIC 1"
+        #nic = input("\nType the network interface name (example: NIC 1): ")
+        #if nic == "":
+        nic = "NIC 1"
 
         if "network_interface" in infra_dict.keys():
             infra_dict["network_interface"].append({
@@ -276,6 +274,8 @@ class Infrastructure:
                     "Name": instance_name
                 }
             }]
+
+        self.update_infra(infra_dict)
 
         print(f"{COLORS.OKGREEN}\nInstances info acquired.{COLORS.ENDC}")
         print("===========================")

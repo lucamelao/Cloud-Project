@@ -18,7 +18,7 @@ while True:
     initial_input = False
     while not initial_input:
         user_interface.show_options()
-        option = input("\nChoose an option: ").upper()
+        option = input("Choose an option: ").upper()
     
         if option == "B":
             initial_input = True
@@ -29,6 +29,7 @@ while True:
         elif option == "L":
             initial_input = True
             L.list()  
+            break
 
         elif option == "D":
             initial_input = True
