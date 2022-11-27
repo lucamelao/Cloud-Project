@@ -1,14 +1,8 @@
 # Imports
 from python.resources import Infrastructure
-import subprocess
-import json
+from python.design import COLORS, UI
 
-class UI:
-    def draw_header(self):
-        with open("start_image.txt", 'r') as f:
-            print(f.read())
-    def show_options(self):
-        print("Options: \n\n  1. [B]uild \n\n  2. [L]ist \n\n  3. [D]estroy \n\n  4. [Q]uit \n")
+import subprocess       
 
 class Build_Terraform:
 
@@ -20,33 +14,40 @@ class Build_Terraform:
 
     def set_infra(self):
 
+        print("===================================================================\n")
+        print("Let's start building your infrastructure!\nIf you're in doubt about what to type, just press enter to set the values as default.\n")
+
         infra = Infrastructure()
 
+        # Criando o backup do arquivo my.tfvars.json antes de configurar mudanças na infraestrutura
+        backup = infra.get_infra()
+
+        infra.region()
         infra.user()
         infra.vpc()
         infra.subnet()
         infra.security_group()
+        infra.network_interface()
         infra.instance()
 
-        with open('resources.json', 'r') as f:
-            infra_data = json.load(f)
+        print(f"{COLORS.OKGREEN}\nConfiguration done!{COLORS.ENDC}")
+        print("===================================================================\n")
+        return backup
 
-            with open("test.tfvars.json", "w") as output_file:
-                json.dump(infra_data, output_file, indent=4)
 
-    def build_infra(self):
+    def build_infra(self, backup):
 
-        subprocess.call(['sh', './shell_scripts/init.sh'])
-        print(f"\nNow let's create your Private Cloud...\n")
+        print("Initializing Terraform")
+        subprocess.call(['sh', '../shell_scripts/init.sh'])
+        print("===================================================================\n")
 
-        
         print("VALIDATING YOUR INFRASTRUCTURE\n")
-        subprocess.call(['sh', './shell_scripts/validate.sh'])
+        subprocess.call(['sh', '../shell_scripts/validate.sh'])
 
         print("===================================================================\n")
 
         print("PLANNING\n")
-        subprocess.call(['sh', './shell_scripts/plan.sh'])
+        subprocess.call(['sh', '../shell_scripts/plan.sh'])
 
         print("===================================================================\n")
 
@@ -54,21 +55,26 @@ class Build_Terraform:
             apply = input('Apply? [Y]es or [N]o: ').upper()
             if apply == 'Y':
                 print("\nAPPLYING\n")
-                try:
-                    res = subprocess.call(['sh', './shell_scripts/apply.sh'])
+                res = subprocess.call(['sh', '../shell_scripts/apply.sh'])
+                if res != 0:
+                    print("===================================================================\n")
+                    print("Something went wrong. Implementing again...\n")
+                    subprocess.call(['sh', '../shell_scripts/apply.sh'])
+                else:
                     print("===================================================================\n")
                     print("Your infrastructure is ready!\n")
                     break
-                except res == 0:
-                    print("===================================================================\n")
-                    print("Something went wrong. Implementing again...\n")
-                    subprocess.call(['sh', './shell_scripts/apply.sh'])
-
             elif apply == 'N':
-                print("Operation canceled.\n")
+                print("\nOperation canceled.\n")
+
+                # Resetando o arquivo my.tfvars.json para o backup
+                infra = Infrastructure()
+                infra.update_infra(backup)
+
+                print(f"{COLORS.FAIL}All the inputed values were dropped.\n{COLORS.ENDC}")
                 break
             else:
-                print("Invalid option, try again.\n")
+                print(f"{COLORS.WARNING}Invalid option, try again.\n{COLORS.ENDC}")
 
 class List_Terraform:
 
@@ -90,14 +96,14 @@ class Destroy_Terraform:
     def destroy(self):
         print("===================================================================\n")
         print("Destroying your infrastructure...\n")
-        res = subprocess.call(['sh', './shell_scripts/destroy.sh'])
+        res = subprocess.call(['sh', '../shell_scripts/destroy.sh'])
         if res == 0:
             print("===================================================================\n")
             print("Your infrastructure was destroyed.\n")
         else:
             print("===================================================================\n")
             print("Something went wrong. Destroying again...\n")
-            subprocess.call(['sh', './shell_scripts/destroy.sh'])
+            subprocess.call(['sh', '../shell_scripts/destroy.sh'])
 
 class Quit_Terraform:
 

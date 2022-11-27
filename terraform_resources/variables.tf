@@ -1,4 +1,4 @@
-variable "aws_region" {
+variable "region" {
   type        = string
   description = ""
   default     = "us-east-1"
@@ -22,7 +22,7 @@ variable "instances" {
     {
       ami               = "ami-08c40ec9ead489470"
       type              = "t2.micro"
-      network_interface = "eth0"
+      network_interface = "NIC 1"
       device_index      = 0
       tags = {
         Name = "Tag da instancia do luca"

@@ -1,2 +1,1 @@
-cd ../terraform_resources
-terraform validate
+(cd ../terraform_resources && terraform validate)

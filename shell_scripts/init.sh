@@ -1,2 +1,1 @@
-cd ../terraform_resources
-terraform init
+(cd ../terraform_resources && terraform init)

@@ -1,2 +1,1 @@
-cd ../terraform_resources
-terraform show
+(cd ../terraform_resources && terraform show)

@@ -2,7 +2,9 @@
 Main file, execute to run the User Interface.
 '''
 
-from python.helpers import *
+from python.actions import *
+from python.design import *
+from python.design import *
 
 user_interface = UI()
 B = Build_Terraform()
@@ -16,12 +18,12 @@ while True:
     initial_input = False
     while not initial_input:
         user_interface.show_options()
-        option = input("Choose an option: ").upper()
+        option = input("\nChoose an option: ").upper()
     
         if option == "B":
             initial_input = True
-            B.set_infra()
-            B.build_infra()
+            backup = B.set_infra()
+            B.build_infra(backup)
             break
 
         elif option == "L":
@@ -37,4 +39,4 @@ while True:
             Q.end()   
 
         else:
-            print("[ERROR] Invalid input. Please try again.\n")        
+            print(f"{COLORS.WARNING}[WARNING] Invalid input. Please try again.\n{COLORS.ENDC}")
