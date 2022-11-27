@@ -20,22 +20,23 @@ while True:
         user_interface.show_options()
         option = input("Choose an option: ").upper()
     
-        if option == "B":
+        if option == "B" or option == "1":
             initial_input = True
             backup = B.set_infra()
             B.build_infra(backup)
             break
 
-        elif option == "L":
+        elif option == "L" or option == "2":
             initial_input = True
             L.list()  
             break
 
-        elif option == "D":
+        elif option == "D" or option == "3":
             initial_input = True
             D.destroy()   
+            break
 
-        elif option == "Q":
+        elif option == "Q" or option == "4":
             initial_input = True
             Q.end()   
 

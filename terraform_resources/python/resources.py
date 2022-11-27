@@ -54,10 +54,12 @@ class Infrastructure:
             vpc_name = input("\nType the VPC name: ")
             if vpc_name == "":
                 vpc_name = "VPC do LUCA"
+                print(f"{COLORS.OKBLUE}Default value inputed: {vpc_name}{COLORS.ENDC}")
             
             vpc_cidr = input("\nType the VPC CIDR (example: 10.0.0.0/16): ")
             if vpc_cidr == "":
                 vpc_cidr = "10.0.0.0/16"
+                print(f"{COLORS.OKBLUE}Default value inputed: {vpc_cidr}{COLORS.ENDC}")
 
             infra_dict["vpc"] = {
                 "cidr_block": vpc_cidr,
@@ -79,10 +81,12 @@ class Infrastructure:
         subnet_name = input("\nType the subnet name: ")
         if subnet_name == "":
             subnet_name = "SUBNET LUCA"
+            print(f"{COLORS.OKBLUE}Default value inputed: {subnet_name}{COLORS.ENDC}")
 
         subnet_cidr = input("\nType the subnet CIDR (example: 10.0.1.0/24): ")
         if subnet_cidr == "":
             subnet_cidr = "10.0.1.0/24"
+            print(f"{COLORS.OKBLUE}Default value inputed: {subnet_cidr}{COLORS.ENDC}")
 
         if "subnets" in infra_dict.keys():
             infra_dict["subnets"].append({
@@ -198,12 +202,14 @@ class Infrastructure:
         private_ip_address = input("\nType the private IP address (example: 10.0.1.4): ")
         if private_ip_address == "":
             private_ip_address = "10.0.1.4"
+            print(f"{COLORS.OKBLUE}Default value inputed: {private_ip_address}{COLORS.ENDC}")
         
         security_groups = infra_dict["security_groups"][0]["tags"]["Name"]
         
-        #nic = input("\nType the network interface name (example: NIC 1): ")
-        #if nic == "":
-        nic = "NIC 1"
+        nic = input("\nType the network interface name (example: NIC 1): ")
+        if nic == "":
+            nic = "NIC 1"
+            print(f"{COLORS.OKBLUE}Default value inputed: {nic}{COLORS.ENDC}")
 
         if "network_interface" in infra_dict.keys():
             infra_dict["network_interface"].append({
@@ -239,9 +245,11 @@ class Infrastructure:
             user_choice = input("\nSelect a instance size: \n\n  A. t1.micro \n\n  B. t2.micro \n\n").upper()
             if user_choice == "A":
                 instance_type = "t1.micro"
+                print(f"{COLORS.OKBLUE}Choosed type: {instance_type}{COLORS.ENDC}")
                 break
             elif user_choice == "B":
                 instance_type = "t2.micro"
+                print(f"{COLORS.OKBLUE}Choosed type: {instance_type}{COLORS.ENDC}")
                 break
             else:
                 print("\nInvalid option. Please, try again.")
@@ -249,8 +257,11 @@ class Infrastructure:
         instance_name = input("\nType the instance name: ")
         if instance_name == "":
             instance_name = "INSTANCE LUCA"
+            print(f"{COLORS.OKBLUE}Default value inputed: {instance_name}{COLORS.ENDC}")
 
         ami = "ami-08c40ec9ead489470"
+        print(f"{COLORS.OKBLUE}Default value inputed for Ubuntu AMI: {ami}{COLORS.ENDC}")
+
         network_interface = infra_dict["network_interface"][0]["tags"]["Name"]
         device_index = 0
 
