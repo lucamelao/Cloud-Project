@@ -19,7 +19,7 @@ class Build_Terraform:
         infra = Infrastructure()
         print(f"{COLORS.FAIL} \nCtrl + C was pressed, all inputs were discarted.")            
         infra.update_infra(backup)
-        print(f"{COLORS.OKGREEN} \nThe bakcup was restored.\n")    
+        print(f"{COLORS.OKGREEN} \nThe backup was restored.\n")    
         
     def set_infra(self):
 
@@ -114,18 +114,13 @@ class List_Terraform:
         infra = Infrastructure()
         information = infra.get_infra()
 
-        print(f"{COLORS.BOLD}{COLORS.OKCYAN}Options: \n\n  1. List all active instances \n\n  2. List an specific instance.{COLORS.ENDC}")
+        print(f"{COLORS.BOLD}{COLORS.OKCYAN}Options: \n\n  1. List all active instances \n\n  2. List an specific instance{COLORS.ENDC}")
 
         user_choice = str(input("\n Choose an option: "))
 
         # Nessa aplicação, as informações abaixo não são afetadas de acordo com each instance.
         # Pois todas as instâncias são associadas a um VPC padrão e criadas em uma mesma região.
 
-        users = information["iam_users"]
-        vpc_name = information['vpc']['tags']['Name']
-        security_group_name = information['security_groups'][0]['tags']['Name']
-        security_groups_ingress_rules = information['security_groups'][0]['ingress']
-        security_groups_egress_rules = information['security_groups'][0]['egress']
 
         if user_choice == '1':
             print("===================================================================\n")
@@ -135,6 +130,11 @@ class List_Terraform:
                     f"{COLORS.WARNING}You don't have any active instances.\n{COLORS.ENDC}")
 
             else:
+                users = information["iam_users"]
+                vpc_name = information['vpc']['tags']['Name']
+                security_group_name = information['security_groups'][0]['tags']['Name']
+                security_groups_ingress_rules = information['security_groups'][0]['ingress']
+                security_groups_egress_rules = information['security_groups'][0]['egress']
 
                 active_instances = len(information["instances"])
                 print(
@@ -159,27 +159,38 @@ class List_Terraform:
         elif user_choice == '2':
 
             print("===================================================================\n")
-            nome = input(
-                "Type the name of the specific instance you want to display info: ")
-
-            exists = False
-            for instance in information["instances"]:
-                if instance['tags']['Name'] == nome:
-                    exists = True
-                    print(f"\n{COLORS.OKCYAN}{COLORS.BOLD}Instance: {instance['tags']['Name']}\n{COLORS.ENDC}")
-                    print(f"  {COLORS.OKCYAN}VPC: {vpc_name}\n{COLORS.ENDC}")
-                    print(f"  {COLORS.OKCYAN}Type: {instance['type']}\n{COLORS.ENDC}")
-                    print(f"  {COLORS.OKCYAN}Associated Security Group: {security_group_name}\n{COLORS.ENDC}")
-                    print(f"  {COLORS.OKCYAN}Associated SG Ingress Rules: {security_groups_ingress_rules}\n{COLORS.ENDC}")
-                    print(f"  {COLORS.OKCYAN}Associated SG Egress Rules: {security_groups_egress_rules}\n{COLORS.ENDC}")
-                    print(f"  {COLORS.OKCYAN}Network Interface: {instance['network_interface']}\n{COLORS.ENDC}")
-                    print(f"  {COLORS.OKCYAN}Region: us-east-1\n{COLORS.ENDC}")
-                    print(f"  {COLORS.OKCYAN}Users: {users}\n{COLORS.ENDC}")
-                    print("===================================================================\n")
-                    break
-            if not exists:
+            
+            
+            if "instances" not in information:
                 print(
-                    f"\n{COLORS.WARNING}You don't have any active instances with this name. Try again.\n{COLORS.ENDC}")
+                    f"{COLORS.WARNING}You don't have any active instances.\n{COLORS.ENDC}")
+
+            else:       
+                nome = input(f"{COLORS.OKCYAN}Type the name of the specific instance you want to display info: {COLORS.ENDC}")
+                users = information["iam_users"]
+                vpc_name = information['vpc']['tags']['Name']
+                security_group_name = information['security_groups'][0]['tags']['Name']
+                security_groups_ingress_rules = information['security_groups'][0]['ingress']
+                security_groups_egress_rules = information['security_groups'][0]['egress']
+                
+                exists = False
+                for instance in information["instances"]:
+                    if instance['tags']['Name'] == nome:
+                        exists = True
+                        print(f"\n{COLORS.OKCYAN}{COLORS.BOLD}Instance: {instance['tags']['Name']}\n{COLORS.ENDC}")
+                        print(f"  {COLORS.OKCYAN}VPC: {vpc_name}\n{COLORS.ENDC}")
+                        print(f"  {COLORS.OKCYAN}Type: {instance['type']}\n{COLORS.ENDC}")
+                        print(f"  {COLORS.OKCYAN}Associated Security Group: {security_group_name}\n{COLORS.ENDC}")
+                        print(f"  {COLORS.OKCYAN}Associated SG Ingress Rules: {security_groups_ingress_rules}\n{COLORS.ENDC}")
+                        print(f"  {COLORS.OKCYAN}Associated SG Egress Rules: {security_groups_egress_rules}\n{COLORS.ENDC}")
+                        print(f"  {COLORS.OKCYAN}Network Interface: {instance['network_interface']}\n{COLORS.ENDC}")
+                        print(f"  {COLORS.OKCYAN}Region: us-east-1\n{COLORS.ENDC}")
+                        print(f"  {COLORS.OKCYAN}Users: {users}\n{COLORS.ENDC}")
+                        print("===================================================================\n")
+                        break
+                if not exists:
+                    print(
+                        f"\n{COLORS.WARNING}You don't have any active instances with this name. Try again.\n{COLORS.ENDC}")
 
         else:
             print(f"{COLORS.WARNING}Invalid option, try again.\n{COLORS.ENDC}")
@@ -202,49 +213,20 @@ class Destroy_Terraform:
         backup = infra.get_infra()
 
         try:
-            print(f"{COLORS.BOLD}{COLORS.FAIL}Options: \n\n  1. Destroy Instance \n\n  2. Destroy Security Group \n\n  3. Destroy IAM users \n\n  4. Destroy your entire infrastructure \n{COLORS.ENDC}")
+            print(f"{COLORS.BOLD}{COLORS.FAIL}Options: \n\n  1. Destroy IAM users \n\n  2. Destroy Instance \n\n  3. Destroy your entire infrastructure \n{COLORS.ENDC}")
 
-            user_choice = str(input("Choose an option: "))
+            user_choice = str(input("Choose an option (1, 2 or 3): "))
 
             if user_choice == '1':
-                print("===================================================================\n")
-                if "instances" not in information.keys():
-                    print(f"\n{COLORS.WARNING}You don't have any active instance to destroy.\n{COLORS.ENDC}")
-                    return
-                
-                nome = input(f"{COLORS.BOLD}{COLORS.FAIL}Type the name of the specific instance you want to destroy: {COLORS.ENDC}")
-                information = infra.get_infra()
-
-                exists = False
-                for instance in information["instances"]:
-                    if instance['tags']['Name'] == nome:
-                        exists = True
-                        selected_instance = instance
-                        break
-                
-                if exists:
-                    information["instances"].remove(selected_instance)
-                    infra.update_infra(information)
-                    B = Build_Terraform()
-                    B.build_infra(information)
-                    print(f"{COLORS.FAIL}\nInstance {nome} was successfully destroyed.{COLORS.ENDC}\n")
-                else:
-                    print(f"\n{COLORS.WARNING}You don't have any active instances with this name. Try again.\n{COLORS.ENDC}")
-                    
-            elif user_choice == '2':
-                return
-            
-
-            elif user_choice == '3':
                 ''''
-                Destroy de IAM users.
+                Delete de IAM users.
                 '''
 
                 print("===================================================================\n")
                 usernames_to_destroy = [str(x) for x in input(f"{COLORS.BOLD}{COLORS.FAIL}Type the name(s) of the IAM user(s) you want to destroy: {COLORS.ENDC}").split()]
                 information = infra.get_infra()
 
-                if "iam_user" not in information.keys():
+                if "iam_users" not in information.keys():
                     print(f"\n{COLORS.WARNING}You don't have any active IAM users to destroy.\n{COLORS.ENDC}")
                     return
 
@@ -268,8 +250,37 @@ class Destroy_Terraform:
 
                 return
             
+            elif user_choice == '2':
+                ''''
+                Delele instance(s).
+                '''
+                print("===================================================================\n")
+                information = infra.get_infra()
+                if "instances" not in information.keys():
+                    print(f"\n{COLORS.WARNING}You don't have any active instance to destroy.\n{COLORS.ENDC}")
+                    return
+                
+                nome = input(f"{COLORS.BOLD}{COLORS.FAIL}Type the name of the specific instance you want to destroy: {COLORS.ENDC}")
 
-            elif user_choice == '4':
+                exists = False
+                for instance in information["instances"]:
+                    if instance['tags']['Name'] == nome:
+                        exists = True
+                        selected_instance = instance
+                        break
+                
+                if exists:
+                    information["instances"].remove(selected_instance)
+                    infra.update_infra(information)
+                    B = Build_Terraform()
+                    B.build_infra(information)
+                    print(f"{COLORS.FAIL}\nInstance {nome} was successfully destroyed.{COLORS.ENDC}\n")
+                    print(f"{COLORS.FAIL}==================================================================={COLORS.ENDC}\n")
+
+                else:
+                    print(f"\n{COLORS.WARNING}You don't have any active instances with this name. Try again.\n{COLORS.ENDC}")
+
+            elif user_choice == '3':
                 ''''
                 Destroy da infraestrutura inteira.
                 '''

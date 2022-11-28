@@ -111,7 +111,8 @@ class Infrastructure:
     def security_group(self):
 
         '''
-        O security group será default, sendo criado para estar associado a instância.
+        Na minha aplicação o security group será default, sendo diretamente associado a instância.
+        Porém, é possível dar a opção do usuário configurar suas rules e outras infos descomentando as linhas abaixo.
         '''
         
         print("\nNow let's set your security group.")

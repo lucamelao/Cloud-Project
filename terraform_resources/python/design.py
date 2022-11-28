@@ -9,7 +9,7 @@ class UI:
             print(f"{COLORS.orange}{content}{COLORS.ENDC}")
     def show_options(self):
         print(f"{COLORS.BOLD}{COLORS.HEADER}{COLORS.UNDERLINE}MAIN MENU\n{COLORS.ENDC}")
-        print(f"  {COLORS.BOLD}{COLORS.HEADER}Options: \n\n  1. [B]uild \n\n  2. [L]ist \n\n  3. [D]estroy \n\n  4. [Q]uit \n{COLORS.ENDC}")
+        print(f"  {COLORS.BOLD}{COLORS.HEADER}Options: \n\n  1. [B]uild or change any resource \n\n  2. [L]ist all resources or a specific one \n\n  3. [D]estroy your infrastructure or any specific resource \n\n  4. [Q]uit UI \n{COLORS.ENDC}")
 
 class COLORS:
     HEADER = '\033[95m'
